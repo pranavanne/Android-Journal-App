@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.journalapplication.ui.theme.JournalApplicationTheme
 import com.example.journalapplication.data.Post
 import com.example.journalapplication.navigation.NavigationDestination
-import com.example.journalapplication.ui.theme.JournalApplicationTheme
 import java.util.Calendar
 
 object HomeScreenDestination: NavigationDestination {
@@ -96,7 +96,7 @@ fun JournalEntry(post: Post, modifier: Modifier = Modifier) {
         Column(modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = "${post.day}/${post.month}/${post.year}")
+                Text(text = "${post.day}/${post.month}/${post.year}", style = MaterialTheme.typography.titleLarge)
             }
             Text(text = if(post.content.length > 150){
                 post.content.substring(0,150) + "..."
