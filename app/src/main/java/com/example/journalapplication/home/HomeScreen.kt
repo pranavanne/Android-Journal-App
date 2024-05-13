@@ -11,11 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -54,25 +52,14 @@ fun HomeScreen(
             JournalAppBar(title = HomeScreenDestination.titleRes)
         },
         floatingActionButton = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                FloatingActionButton(
-                    onClick = navigateToEntryScreen,
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                FloatingActionButton(
-                    onClick = { /*TODO*/ },
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                }
+            FloatingActionButton(
+                onClick = navigateToEntryScreen,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         },
-        floatingActionButtonPosition = FabPosition.Center
     ) {
         innerPadding -> JournalEntryList(
         posts = uiState,
@@ -93,7 +80,10 @@ fun JournalAppBar(title: String) {
 
 @Composable
 fun JournalEntryList(posts: List<Post>, onPostClicked: (Int) -> Unit, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    LazyColumn(
+        modifier = modifier.padding(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         items(posts) {
             JournalEntry(post = it, modifier = Modifier.clickable{onPostClicked(it.id)})
         }
@@ -120,7 +110,7 @@ fun JournalEntry(post: Post, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun JournalEntryPreview() {
-    JournalApplicationTheme() {
+    JournalApplicationTheme {
         JournalEntry(post = Post(id = 100, day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L))
     }
 }
@@ -128,8 +118,8 @@ fun JournalEntryPreview() {
 @Preview(showBackground = true)
 @Composable
 fun JournalEntryListPreview() {
-    JournalApplicationTheme() {
-        val listOfPosts = listOf<Post>(
+    JournalApplicationTheme {
+        val listOfPosts = listOf(
             Post(id = 100,day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L),
             Post(id = 101, day = 2, month = 2, year = 2, content = "Using test Input value", time = 10001L),
             Post(id = 102, day = 3, month = 3, year = 3, content = "Using test Input value", time = 10002L)
