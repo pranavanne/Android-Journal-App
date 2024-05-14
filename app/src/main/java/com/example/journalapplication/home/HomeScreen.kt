@@ -113,9 +113,9 @@ fun JournalEntryList(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)) {
-            OutlinedTextField(value = uiState.day, onValueChange = { onDayChanged(it) }, label = { Text(text = "Day")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
-            OutlinedTextField(value = uiState.month, onValueChange = { onMonthChanged(it) }, label = { Text(text = "Month")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
-            OutlinedTextField(value = uiState.year, onValueChange = { onYearChanged(it) }, label = { Text(text = "Year")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            OutlinedTextField(value = uiState.day, onValueChange = { if(it.length <= 2 && (it.toIntOrNull() ?: 0) <= 31){onDayChanged(it)} }, label = { Text(text = "Day")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked, singleLine = true)
+            OutlinedTextField(value = uiState.month, onValueChange = { if(it.length <= 2 && (it.toIntOrNull()?:0) <= 12){onMonthChanged(it)} }, label = { Text(text = "Month")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked, singleLine = true)
+            OutlinedTextField(value = uiState.year, onValueChange = { if(it.length <= 4){onYearChanged(it)} }, label = { Text(text = "Year")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked, singleLine = true)
             IconButton(onClick = { onFilterButtonClicked(!uiState.filterButtonClicked) }) {
                 if (uiState.filterButtonClicked) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = null)
