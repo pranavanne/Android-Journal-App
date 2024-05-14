@@ -72,13 +72,13 @@ class HomeScreenViewModel(postsRepository: PostsRepository): ViewModel() {
             return postsData.filter { it.month == monthInput }
         } else if (monthInput == 0 && yearInput == 0) { // day provided
             return postsData.filter { it.day == dayInput }
-        } else if (monthInput == 0) {
+        } else if (monthInput == 0) { // day and year provided
             return postsData.filter { it.day == dayInput && it.year == yearInput }
-        } else if (dayInput == 0) {
+        } else if (dayInput == 0) { // month and year provided
             return postsData.filter { it.month == monthInput && it.year == yearInput }
-        } else if (yearInput == 0) {
+        } else if (yearInput == 0) { // day and month provided
             return postsData.filter { it.day == dayInput && it.month == monthInput }
-        } else {
+        } else { // day, month and year provided
             return postsData.filter { it.day == dayInput && it.month == monthInput && it.year == yearInput }
         }
     }

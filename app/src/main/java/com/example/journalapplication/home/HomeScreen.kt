@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -30,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -111,9 +113,9 @@ fun JournalEntryList(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)) {
-            OutlinedTextField(value = uiState.day, onValueChange = { onDayChanged(it) }, label = { Text(text = "Day")}, modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
-            OutlinedTextField(value = uiState.month, onValueChange = { onMonthChanged(it) }, label = { Text(text = "Month")}, modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
-            OutlinedTextField(value = uiState.year, onValueChange = { onYearChanged(it) }, label = { Text(text = "Year")}, modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            OutlinedTextField(value = uiState.day, onValueChange = { onDayChanged(it) }, label = { Text(text = "Day")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            OutlinedTextField(value = uiState.month, onValueChange = { onMonthChanged(it) }, label = { Text(text = "Month")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            OutlinedTextField(value = uiState.year, onValueChange = { onYearChanged(it) }, label = { Text(text = "Year")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
             IconButton(onClick = { onFilterButtonClicked(!uiState.filterButtonClicked) }) {
                 if (uiState.filterButtonClicked) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = null)
