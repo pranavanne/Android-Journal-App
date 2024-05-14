@@ -6,17 +6,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +37,8 @@ import com.example.journalapplication.ui.theme.JournalApplicationTheme
 import com.example.journalapplication.data.Post
 import com.example.journalapplication.navigation.NavigationDestination
 import java.util.Calendar
+import kotlin.reflect.KFunction1
+import kotlin.reflect.KFunction4
 
 object HomeScreenDestination: NavigationDestination {
     override val route: String = "home"
@@ -43,8 +51,11 @@ fun HomeScreen(
     navigateToEntryScreen: () -> Unit,
     navigateToEntryDetailsScreen: (Int) -> Unit,
 ) {
-    val uiState by homeScreenViewModel.uiState.collectAsState()
-    Log.d("wonder", uiState.toString())
+    val uiState = homeScreenViewModel.uiState
+
+    val postsDataState by uiState.postsDataState.collectAsState()
+
+    Log.d("wonder", postsDataState.toString())
     Log.d("wonder", Calendar.getInstance().get(Calendar.DATE).toString())
 
     Scaffold(
@@ -62,7 +73,13 @@ fun HomeScreen(
         },
     ) {
         innerPadding -> JournalEntryList(
-        posts = uiState,
+        uiState = uiState,
+        posts = postsDataState,
+        onDayChanged = homeScreenViewModel::updateDay,
+        onMonthChanged = homeScreenViewModel::updateMonth,
+        onYearChanged = homeScreenViewModel::updateYear,
+        onFilterButtonClicked = homeScreenViewModel::onFilterButtonClicked,
+        filterPosts = homeScreenViewModel::filterPosts,
         onPostClicked = navigateToEntryDetailsScreen,
         modifier = Modifier.padding(innerPadding))
     }
@@ -79,15 +96,48 @@ fun JournalAppBar(title: String) {
 }
 
 @Composable
-fun JournalEntryList(posts: List<Post>, onPostClicked: (Int) -> Unit, modifier: Modifier = Modifier) {
-    LazyColumn(
-        modifier = modifier.padding(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        items(posts) {
-            JournalEntry(post = it, modifier = Modifier.clickable{onPostClicked(it.id)})
+fun JournalEntryList(
+    uiState: HomeScreenData,
+    posts: List<Post>,
+    onPostClicked: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    onDayChanged: KFunction1<String, Unit>,
+    onMonthChanged: KFunction1<String, Unit>,
+    onYearChanged: KFunction1<String, Unit>,
+    onFilterButtonClicked: KFunction1<Boolean, Unit>,
+    filterPosts: KFunction4<List<Post>, String, String, String, List<Post>>
+) {
+    Column(modifier = modifier) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)) {
+            OutlinedTextField(value = uiState.day, onValueChange = { onDayChanged(it) }, label = { Text(text = "Day")}, modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            OutlinedTextField(value = uiState.month, onValueChange = { onMonthChanged(it) }, label = { Text(text = "Month")}, modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            OutlinedTextField(value = uiState.year, onValueChange = { onYearChanged(it) }, label = { Text(text = "Year")}, modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked)
+            IconButton(onClick = { onFilterButtonClicked(!uiState.filterButtonClicked) }) {
+                if (uiState.filterButtonClicked) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                } else {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                }
+            }
+        }
+        LazyColumn(
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(
+                if (uiState.filterButtonClicked) {
+                    filterPosts(posts,uiState.day, uiState.month, uiState.year)
+                } else {
+                    posts
+                }
+            ) {
+                JournalEntry(post = it, modifier = Modifier.clickable{onPostClicked(it.id)})
+            }
         }
     }
+
 }
 
 @Composable
@@ -112,18 +162,5 @@ fun JournalEntry(post: Post, modifier: Modifier = Modifier) {
 fun JournalEntryPreview() {
     JournalApplicationTheme {
         JournalEntry(post = Post(id = 100, day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L))
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun JournalEntryListPreview() {
-    JournalApplicationTheme {
-        val listOfPosts = listOf(
-            Post(id = 100,day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L),
-            Post(id = 101, day = 2, month = 2, year = 2, content = "Using test Input value", time = 10001L),
-            Post(id = 102, day = 3, month = 3, year = 3, content = "Using test Input value", time = 10002L)
-        )
-        JournalEntryList(posts = listOfPosts, {})
     }
 }
