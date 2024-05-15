@@ -1,5 +1,6 @@
 package com.example.journalapplication.data
 
+import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,5 +12,6 @@ data class Post(
     @ColumnInfo(name = "month") val month: Int,
     @ColumnInfo(name = "year") val year: Int,
     @ColumnInfo(name = "content") val content: String,
-    @ColumnInfo(name = "time") val time: Long
+    @ColumnInfo(name = "time") val time: Long,
+    @ColumnInfo(name = "uri") val uri: Uri
 )

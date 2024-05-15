@@ -1,5 +1,6 @@
 package com.example.journalapplication.edit
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -41,7 +42,7 @@ class JournalEntryEditScreenViewModel(savedStateHandle: SavedStateHandle, privat
     }
 
     fun updateUiState(entryEditData: EntryEditData) {
-        uiState = uiState.copy(content = entryEditData.content, isEntryValid = validateInput(entryEditData))
+        uiState = uiState.copy(content = entryEditData.content, imageUri = entryEditData.imageUri, isEntryValid = validateInput(entryEditData))
     }
 
     fun validateInput(entryEditData: EntryEditData = uiState): Boolean {
@@ -52,16 +53,17 @@ class JournalEntryEditScreenViewModel(savedStateHandle: SavedStateHandle, privat
 
     suspend fun saveUpdate() {
         if(validateInput()) {
-            postsRepository.updatePost(postData.copy(content = uiState.content))
+            postsRepository.updatePost(postData.copy(content = uiState.content, uri = uiState.imageUri))
         }
     }
 }
 
 private fun Post.toEntryEditData(): EntryEditData {
-    return EntryEditData(content = content)
+    return EntryEditData(content = content, imageUri = uri)
 }
 
 data class EntryEditData(
     val content: String = "",
+    val imageUri: Uri = Uri.EMPTY,
     var isEntryValid: Boolean = false
 )

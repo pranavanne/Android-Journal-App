@@ -1,5 +1,6 @@
 package com.example.journalapplication.entry
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -40,7 +41,7 @@ class JournalEntryScreenViewModel(private val postsRepository: PostsRepository):
     suspend fun saveInput() {
         if (uiState.isEntryValid) {
             val calendar = Calendar.getInstance()
-            val post = Post(id = 0, day = calendar.get(Calendar.DATE), month = calendar.get(Calendar.MONTH) + 1, year = calendar.get(Calendar.YEAR), content = uiState.content, time = Calendar.getInstance().timeInMillis)
+            val post = Post(id = 0, day = calendar.get(Calendar.DATE), month = calendar.get(Calendar.MONTH) + 1, year = calendar.get(Calendar.YEAR), content = uiState.content, time = Calendar.getInstance().timeInMillis, uri = uiState.uri)
             postsRepository.insertPost(post)
         }
     }
@@ -48,5 +49,6 @@ class JournalEntryScreenViewModel(private val postsRepository: PostsRepository):
 
 data class EntryData(
     val content: String = "",
+    val uri: Uri = Uri.EMPTY,
     var isEntryValid: Boolean = false
 )

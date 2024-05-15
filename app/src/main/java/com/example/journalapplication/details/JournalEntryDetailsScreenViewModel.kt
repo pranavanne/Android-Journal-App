@@ -1,5 +1,6 @@
 package com.example.journalapplication.details
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +22,7 @@ class JournalEntryDetailsScreenViewModel(savedStateHandle: SavedStateHandle, pri
     val uiState = postsRepository.getPost(journalId).filterNotNull().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000L),
-        Post(day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L),
+        Post(day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L, uri = Uri.EMPTY),
     )
 
     companion object {

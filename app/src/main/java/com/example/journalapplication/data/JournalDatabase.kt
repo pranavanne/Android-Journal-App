@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@Database(entities = [Post::class], version = 2, exportSchema = false)
+@Database(entities = [Post::class], version = 4, exportSchema = false)
+@TypeConverters(value = [ArrayListConverter::class])
 abstract class JournalDatabase: RoomDatabase() {
     abstract fun postDao(): PostDao
 

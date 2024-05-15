@@ -1,12 +1,22 @@
 package com.example.journalapplication.edit
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -18,12 +28,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.journalapplication.navigation.NavigationDestination
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
 object JournalEntryEditDestination : NavigationDestination {
@@ -33,7 +45,6 @@ object JournalEntryEditDestination : NavigationDestination {
     val routeWithArgs = "$route/{$journalIdArgs}"
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun JournalEntryEditScreen(
     viewModel: JournalEntryEditScreenViewModel = viewModel(factory = JournalEntryEditScreenViewModel.Factory),
@@ -71,7 +82,9 @@ fun JournalEntryEditScreen(
         JournalEntryEditBody(
             post = uiState,
             onEdit = viewModel::updateUiState,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 10.dp)
         )
     }
 }
@@ -108,7 +121,16 @@ fun JournalEntryEditInputForm(
     onEdit: (EntryEditData) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null){
+            onEdit(post.copy(imageUri = uri))
+        }
+    }
+
+    Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         OutlinedTextField(
             label = { Text(text = "Content") },
             value = post.content,
@@ -117,5 +139,35 @@ fun JournalEntryEditInputForm(
                 .fillMaxWidth()
                 .height(400.dp)
         )
+        Spacer(modifier = Modifier.padding(10.dp))
+        if (post.imageUri != Uri.EMPTY) {
+            Box {
+                IconButton(onClick = { launcher.launch("image/*") }, modifier = Modifier
+                    .zIndex(100f)
+                    .align(
+                        Alignment.TopStart
+                    )) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.background
+                    )
+                }
+                IconButton(onClick = { onEdit(post.copy(imageUri = Uri.EMPTY)) }, modifier = Modifier
+                    .zIndex(100f)
+                    .align(Alignment.TopEnd)) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.background,
+                    )
+                }
+                AsyncImage(model = post.imageUri, contentDescription = null)
+            }
+        } else {
+            Button(onClick = { launcher.launch("image/*") }) {
+                Text(text = "Add Image")
+            }
+        }
     }
 }

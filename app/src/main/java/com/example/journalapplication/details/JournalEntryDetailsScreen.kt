@@ -1,5 +1,6 @@
 package com.example.journalapplication.details
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.journalapplication.data.Post
 import com.example.journalapplication.navigation.NavigationDestination
 import kotlinx.coroutines.launch
@@ -117,6 +119,9 @@ fun JournalEntryDetailsBody(
             .padding(10.dp)
     ) {
         Text(text = post.content, modifier = Modifier.fillMaxWidth())
+        if (post.uri != Uri.EMPTY) {
+            AsyncImage(model = post.uri, contentDescription = null)
+        }
         Button(
             onClick = { deleteConfirmationRequired = true },
             modifier = Modifier.padding(20.dp),

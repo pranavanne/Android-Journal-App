@@ -91,4 +91,10 @@ dependencies {
     // Testing
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }

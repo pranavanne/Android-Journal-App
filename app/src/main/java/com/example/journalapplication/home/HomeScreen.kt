@@ -32,10 +32,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.journalapplication.ui.theme.JournalApplicationTheme
 import com.example.journalapplication.data.Post
 import com.example.journalapplication.navigation.NavigationDestination
 import java.util.Calendar
@@ -156,13 +154,5 @@ fun JournalEntry(post: Post, modifier: Modifier = Modifier) {
                 post.content
             })
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun JournalEntryPreview() {
-    JournalApplicationTheme {
-        JournalEntry(post = Post(id = 100, day = 1, month = 1, year = 1, content = "Using test Input value", time = 10000L))
     }
 }
