@@ -88,13 +88,7 @@ dependencies {
     // KSP is a powerful and yet simple API for parsing Kotlin annotations.
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    // Testing
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
-    // gson
-    implementation 'com.google.code.gson:gson:2.8.8'
-
-    // coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    // Glide
+    implementation "com.github.bumptech.glide:compose:1.0.0-beta01"
 }

@@ -1,6 +1,8 @@
 package com.example.journalapplication.details
 
 import android.net.Uri
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +23,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,10 +36,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.journalapplication.data.Post
+import com.example.journalapplication.entry.PopupBox
 import com.example.journalapplication.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
@@ -103,6 +109,7 @@ fun JournalEntryDetailsTopBar(post: Post, navigateBack: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun JournalEntryDetailsBody(
     post: Post,
@@ -118,14 +125,17 @@ fun JournalEntryDetailsBody(
             .verticalScroll(rememberScrollState())
             .padding(10.dp)
     ) {
+        Log.d("DetailsScreen", post.toString())
         Text(text = post.content, modifier = Modifier.fillMaxWidth())
         if (post.uri != Uri.EMPTY) {
-            AsyncImage(model = post.uri, contentDescription = null)
+            var showPopup by rememberSaveable { mutableStateOf(false) }
+            GlideImage(model = post.uri, contentDescription = null, modifier = Modifier.clickable { showPopup = true }.clip(OutlinedTextFieldDefaults.shape))
+            PopupBox(uri = post.uri, showPopup = showPopup, onClickOutside = {showPopup = false})
         }
         Button(
             onClick = { deleteConfirmationRequired = true },
             modifier = Modifier.padding(20.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onErrorContainer, contentColor = MaterialTheme.colorScheme.onError
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer
             )
         ) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = null)
@@ -148,7 +158,8 @@ private fun DeleteConfirmationDialog(
     onDeleteCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AlertDialog(onDismissRequest = { /* Do nothing */ },
+    AlertDialog(
+        onDismissRequest = { /* Do nothing */ },
         title = { Text("Attention") },
         text = { Text("Are you sure you want to delete?") },
         modifier = modifier,
@@ -161,5 +172,6 @@ private fun DeleteConfirmationDialog(
             TextButton(onClick = onDeleteConfirm) {
                 Text("Yes")
             }
-        })
+        }
+    )
 }

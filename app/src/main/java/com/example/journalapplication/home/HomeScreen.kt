@@ -1,6 +1,5 @@
 package com.example.journalapplication.home
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.journalapplication.data.Post
 import com.example.journalapplication.navigation.NavigationDestination
-import java.util.Calendar
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction4
 
@@ -54,9 +53,6 @@ fun HomeScreen(
     val uiState = homeScreenViewModel.uiState
 
     val postsDataState by uiState.postsDataState.collectAsState()
-
-    Log.d("wonder", postsDataState.toString())
-    Log.d("wonder", Calendar.getInstance().get(Calendar.DATE).toString())
 
     Scaffold(
         topBar = {
@@ -108,9 +104,11 @@ fun JournalEntryList(
     filterPosts: KFunction4<List<Post>, String, String, String, List<Post>>
 ) {
     Column(modifier = modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+        ) {
             OutlinedTextField(value = uiState.day, onValueChange = { if(it.length <= 2 && (it.toIntOrNull() ?: 0) <= 31){onDayChanged(it)} }, label = { Text(text = "Day")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked, singleLine = true)
             OutlinedTextField(value = uiState.month, onValueChange = { if(it.length <= 2 && (it.toIntOrNull()?:0) <= 12){onMonthChanged(it)} }, label = { Text(text = "Month")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked, singleLine = true)
             OutlinedTextField(value = uiState.year, onValueChange = { if(it.length <= 4){onYearChanged(it)} }, label = { Text(text = "Year")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(100.dp), enabled = !uiState.filterButtonClicked, singleLine = true)
@@ -137,12 +135,11 @@ fun JournalEntryList(
             }
         }
     }
-
 }
 
 @Composable
 fun JournalEntry(post: Post, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
+    Card(modifier = modifier, shape = OutlinedTextFieldDefaults.shape) {
         Column(modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.weight(1f))
