@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.inventory"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -91,4 +91,7 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:compose:1.0.0-beta01"
+
+    // biometric
+    implementation "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 }

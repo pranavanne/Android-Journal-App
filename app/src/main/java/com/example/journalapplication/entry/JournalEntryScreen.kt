@@ -60,6 +60,8 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
+import com.example.inventory.R
 import com.example.journalapplication.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 import kotlin.math.PI
@@ -241,7 +243,8 @@ fun ZoomableImage(model: Uri, contentDescription: String? = null) {
                     },
                 )
             }
-            .fillMaxSize()
+            .fillMaxSize(),
+        failure = placeholder(R.drawable.ic_launcher_foreground)
     )
 }
 
