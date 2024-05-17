@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (isBiometricSupported()) {
                         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                            .setTitle("Biometric Authentication")
-                            .setSubtitle("Log in using your biometric credential")
+                            .setTitle("Authentication")
+                            .setSubtitle("Log in using your fingerprint or credential")
                             .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
                             .build()
 
