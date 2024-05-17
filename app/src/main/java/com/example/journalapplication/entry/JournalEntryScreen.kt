@@ -157,8 +157,8 @@ fun JournalEntryInputForm(entryData: EntryData, onEntryDataInputted: (EntryData)
                     launcher.launch("image/*")
                               },
                     modifier = Modifier
-                    .zIndex(100f)
-                    .align(Alignment.TopStart)
+                        .zIndex(100f)
+                        .align(Alignment.TopStart)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -169,7 +169,9 @@ fun JournalEntryInputForm(entryData: EntryData, onEntryDataInputted: (EntryData)
                 }
                 IconButton(
                     onClick = { onEntryDataInputted(entryData.copy(uri = Uri.EMPTY)) },
-                    modifier = Modifier.zIndex(100f).align(Alignment.TopEnd)
+                    modifier = Modifier
+                        .zIndex(100f)
+                        .align(Alignment.TopEnd)
                 ) {
                     Icon(imageVector = Icons.Default.Clear, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer,OutlinedTextFieldDefaults.shape))
                 }
@@ -177,7 +179,9 @@ fun JournalEntryInputForm(entryData: EntryData, onEntryDataInputted: (EntryData)
                 GlideImage(
                     model = entryData.uri,
                     contentDescription = null,
-                    modifier = Modifier.clickable { showPopup = true }.clip(OutlinedTextFieldDefaults.shape)
+                    modifier = Modifier
+                        .clickable { showPopup = true }
+                        .clip(OutlinedTextFieldDefaults.shape)
                 )
                 PopupBox(uri = entryData.uri, showPopup = showPopup, onClickOutside = {showPopup = false})
             }
@@ -277,8 +281,15 @@ fun PopupBox(uri: Uri, showPopup: Boolean, onClickOutside: () -> Unit) {
                         .clip(RoundedCornerShape(4.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Surface(modifier = Modifier.padding(20.dp).align(Alignment.BottomEnd).zIndex(100f)) {
-                        IconButton(onClick = {onClickOutside()}, modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer, OutlinedTextFieldDefaults.shape)
+                    Surface(modifier = Modifier
+                        .padding(20.dp)
+                        .align(Alignment.BottomEnd)
+                        .zIndex(100f)) {
+                        IconButton(onClick = {onClickOutside()}, modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.primaryContainer,
+                                OutlinedTextFieldDefaults.shape
+                            )
                             .zIndex(100f)
                         ) {
                             Icon(imageVector = Icons.Default.Clear, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
